@@ -1,0 +1,60 @@
+<main class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <div class="panel-title">
+                Xsolve 
+            </div>
+        </div>
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th (click)="changeOrder('id')">ID</th>
+                    <th (click)="changeOrder('firstName')">Imię</th>
+                    <th (click)="changeOrder('lastName')">Nazwisko</th>
+                    <th (click)="changeOrder('dateOfBirth')">Urodzony</th>
+                    <th (click)="changeOrder('function')">Specjalizacja</th>
+                    <th (click)="changeOrder('experience')">Lata służby</th>
+                </tr>
+                <tr>
+                    <th><input (keyup)="filterData($event)" type="text" style="width: 60px" id="id" ></th>
+                    <th><input (keyup)="filterData($event)" type="text" placeholder="Wpisz szukane imie" id="firstName"></th>
+                    <th><input (keyup)="filterData($event)" type="text" placeholder="Wpisz szukane nazwisko"  id="lastName"></th>
+                    <th><input (change)="filterData($event)" type="date" id="dateOfBirth"></th>
+                    <th><input (keyup)="filterData($event)" type="text" placeholder="Wyszukaj specjalizacji"  id="function"></th>
+                    <th><input (keyup)="filterData($event)" type="text" style="width: 60px;"  id="experience"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let worker of (workers | searchTerm : { term : term, termProp : termProp } | orderBy :  { orderProperty : orderProperty, order: order} | pagination : getCurrentPage() )" [style.color]=" !worker.searchResult ? 'gray':'black'">
+                    <td>{{ worker.id }} {{ last }}</td>
+                    <td>{{ worker.firstName }}</td>
+                    <td>{{ worker.lastName }}</td>
+                    <td>{{ worker.dateOfBirth }}</td>
+                    <td>{{ worker.function }}</td>
+                    <td>{{ worker.experience }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <div class="panel-footer">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" [ngClass]="{'disabled': getCurrentPage() == 1}">
+                        <a class="page-link" (click)="pagePrev()">Previous</a>
+                    </li>
+
+                    <li *ngFor="let p of getPages(); let i = index" class="page-item" [ngClass]="{'active': getCurrentPage() == i + 1 }">
+                        <a class="page-link" (click)="pageSet(i+1)">
+                            {{i + 1}}
+                        </a>
+                    </li>
+
+                    <li class="page-item" [ngClass]="{'disabled': getCurrentPage() + 1 > getPageCount()}">
+                        <a class="page-link" (click)="pageNext()">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</main>
